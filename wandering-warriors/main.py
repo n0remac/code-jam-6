@@ -26,9 +26,9 @@ class Abacus(Widget):
     def __init__(self, **kwargs):
         super(Abacus, self).__init__(**kwargs)
 
-        self.n_bars = 10
-        self.n_top_beads = 1
-        self.n_bottom_beads = 4
+        self.n_bars = 8
+        self.n_top_beads = 2
+        self.n_bottom_beads = 5
         self.bar_w = self.MAX_BAR_W
 
         with self.canvas:
@@ -122,13 +122,13 @@ class Abacus(Widget):
             bar[1].pos = (x, self.y + self.height * self.DIVIDER_OFFSET + w - w / 10)
             bar[1].size = (self.bar_w, self.height * (1 - self.DIVIDER_OFFSET) - 2 * w + w / 10)
 
-            bead_w = spacing - self.BEAD_SPACING
-            bead_x = self.x + w + spacing * i + self.BEAD_SPACING / 2
+            bead_w = (self.height * self.DIVIDER_OFFSET - self.BORDER_W) / (self.n_bottom_beads + 1) * 2 #spacing - self.BEAD_SPACING
+            bead_x = x + self.bar_w / 2 - bead_w / 2
 
             top_beads = self.top_beads[i]
 
             for j in range(self.n_top_beads):
-                top_beads[j].pos = (bead_x, self.y + self.height - self.BORDER_W - bead_w / 2 + j * bead_w / 2)
+                top_beads[j].pos = (bead_x, self.y + self.height - self.BORDER_W - bead_w / 2 - j * bead_w / 2)
                 top_beads[j].size = (bead_w, bead_w / 2)
 
             bottom_beads = self.bottom_beads[i]
