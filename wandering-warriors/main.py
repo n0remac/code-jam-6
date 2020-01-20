@@ -82,7 +82,10 @@ class Abacus(Widget):
         self.bar_w = self.MAX_BAR_W - (0 if self.width > 800 else (800 - self.width) / 800 * 10)
 
         inner_w = self.width - 2 * w
-        bead_w = (self.height - 3 * w) / (self.n_top_beads + 1 + self.n_bottom_beads + 1) * 2
+        bead_w = min(
+            (self.height - 3 * w) / (self.n_top_beads + 1 + self.n_bottom_beads + 1) * 2,
+            (inner_w - self.n_bars * self.MAX_BEAD_SPACING) / self.n_bars
+        )
 
         offset_x = max(0, inner_w - (bead_w + self.MAX_BEAD_SPACING) * self.n_bars) / 2
         abacus_w = self.width - 2 * offset_x
