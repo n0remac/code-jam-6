@@ -18,7 +18,7 @@ class TopMenu(Widget):
 
 
 class Abacus(Widget):
-    BAR_W = 10
+    MAX_BAR_W = 10
     BORDER_W = 16
     DIVIDER_OFFSET = 0.6
     BEAD_SPACING = 8
@@ -29,8 +29,7 @@ class Abacus(Widget):
         self.n_bars = 10
         self.n_top_beads = 1
         self.n_bottom_beads = 4
-
-        print(self.pos)
+        self.bar_w = self.MAX_BAR_W
 
         with self.canvas:
             Color(1, 1, 1, 1)
@@ -81,6 +80,10 @@ class Abacus(Widget):
     def update(self, *args):
         w = max(self.height / 20, self.BORDER_W)
 
+        self.bar_w = self.MAX_BAR_W - (0 if self.width > 800 else (800 - self.width) / 800 * 10)
+
+        print(self.width, (800 - self.width) / 800)
+
         self.border[0].pos = (self.x, self.y + self.height - w)
         self.border[0].size = (self.width, w)
 
@@ -111,13 +114,13 @@ class Abacus(Widget):
             bar = self.bar_rects[i]
             spacing = inner_w / self.n_bars
 
-            x = self.x + w + spacing / 2 + spacing * i - self.BAR_W / 2
+            x = self.x + w + spacing / 2 + spacing * i - self.bar_w / 2
 
             bar[0].pos = (x, self.y + w - w / 10)
-            bar[0].size = (self.BAR_W, self.height - w + w / 10 - self.height * (1 - self.DIVIDER_OFFSET))
+            bar[0].size = (self.bar_w, self.height - w + w / 10 - self.height * (1 - self.DIVIDER_OFFSET))
             
             bar[1].pos = (x, self.y + self.height * self.DIVIDER_OFFSET + w - w / 10)
-            bar[1].size = (self.BAR_W, self.height * (1 - self.DIVIDER_OFFSET) - 2 * w + w / 10)
+            bar[1].size = (self.bar_w, self.height * (1 - self.DIVIDER_OFFSET) - 2 * w + w / 10)
 
             bead_w = spacing - self.BEAD_SPACING
             bead_x = self.x + w + spacing * i + self.BEAD_SPACING / 2
@@ -133,8 +136,6 @@ class Abacus(Widget):
             for j in range(self.n_bottom_beads):
                 bottom_beads[j].pos = (bead_x, self.y + self.BORDER_W + j * bead_w / 2)
                 bottom_beads[j].size = (bead_w, bead_w / 2)
-
-
 
 
 class Ledger(Widget):
