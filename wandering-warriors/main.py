@@ -19,9 +19,9 @@ class TopMenu(Widget):
 
 class Abacus(Widget):
     MAX_BAR_W = 10
-    BORDER_W = 16
+    MIN_BORDER_W = 16
     DIVIDER_OFFSET = 0.6
-    BEAD_SPACING = 8
+    MAX_BEAD_SPACING = 8
 
     def __init__(self, **kwargs):
         super(Abacus, self).__init__(**kwargs)
@@ -78,43 +78,48 @@ class Abacus(Widget):
         self.update()
 
     def update(self, *args):
-        w = max(self.height / 20, self.BORDER_W)
+        w = max(self.height / 20, self.MIN_BORDER_W)
 
         self.bar_w = self.MAX_BAR_W - (0 if self.width > 800 else (800 - self.width) / 800 * 10)
 
         print(self.width, (800 - self.width) / 800)
 
-        self.border[0].pos = (self.x, self.y + self.height - w)
-        self.border[0].size = (self.width, w)
+        inner_w = self.width - 2 * w
+        bead_w = (self.height * self.DIVIDER_OFFSET - self.MIN_BORDER_W) / (self.n_bottom_beads + 1) * 2
 
-        self.border[1].pos = self.pos
-        self.border[1].size = (self.width, w)
+        offset_x = max(0, inner_w - (bead_w + self.MAX_BEAD_SPACING) * self.n_bars) / 2
+        abacus_w = self.width - 2 * offset_x
+        inner_w -= 2 * offset_x
 
-        self.border[2].pos = self.pos
+        self.border[0].pos = (self.x + offset_x, self.y + self.height - w)
+        self.border[0].size = (abacus_w, w)
+
+        self.border[1].pos = (self.x + offset_x, self.y)
+        self.border[1].size = (abacus_w, w)
+
+        self.border[2].pos = (self.x + offset_x, self.y)
         self.border[2].size = (w, self.height)
 
-        self.border[3].pos = (self.x + self.width - w, self.y)
+        self.border[3].pos = (self.x + offset_x + abacus_w - w, self.y)
         self.border[3].size = (w, self.height)
 
-        inner_w = self.width - 2 * w
+        self.border_highlight[0].pos = (self.x + offset_x, self.y + self.height - w / 5)
+        self.border_highlight[0].size = (abacus_w, w / 5)
 
-        self.border_highlight[0].pos = (self.x, self.y + self.height - w / 5)
-        self.border_highlight[0].size = (self.width, w / 5)
-
-        self.border_highlight[1].pos = (self.x + w, self.y + 4 * w / 5)
+        self.border_highlight[1].pos = (self.x + offset_x + w, self.y + 4 * w / 5)
         self.border_highlight[1].size = (inner_w, w / 5)
 
-        self.divider.pos = (self.x + w, self.y + self.height * self.DIVIDER_OFFSET)
+        self.divider.pos = (self.x + offset_x + w, self.y + self.height * self.DIVIDER_OFFSET)
         self.divider.size = (inner_w, w)
 
-        self.border_highlight[2].pos = (self.x + w, self.y + 4 * w / 5 + self.height * self.DIVIDER_OFFSET)
+        self.border_highlight[2].pos = (self.x + offset_x + w, self.y + 4 * w / 5 + self.height * self.DIVIDER_OFFSET)
         self.border_highlight[2].size = (inner_w, w / 5)
 
         for i in range(self.n_bars):
             bar = self.bar_rects[i]
             spacing = inner_w / self.n_bars
 
-            x = self.x + w + spacing / 2 + spacing * i - self.bar_w / 2
+            x = self.x + offset_x + w + spacing / 2 + spacing * i - self.bar_w / 2
 
             bar[0].pos = (x, self.y + w - w / 10)
             bar[0].size = (self.bar_w, self.height - w + w / 10 - self.height * (1 - self.DIVIDER_OFFSET))
@@ -122,19 +127,18 @@ class Abacus(Widget):
             bar[1].pos = (x, self.y + self.height * self.DIVIDER_OFFSET + w - w / 10)
             bar[1].size = (self.bar_w, self.height * (1 - self.DIVIDER_OFFSET) - 2 * w + w / 10)
 
-            bead_w = (self.height * self.DIVIDER_OFFSET - self.BORDER_W) / (self.n_bottom_beads + 1) * 2 #spacing - self.BEAD_SPACING
             bead_x = x + self.bar_w / 2 - bead_w / 2
 
             top_beads = self.top_beads[i]
 
             for j in range(self.n_top_beads):
-                top_beads[j].pos = (bead_x, self.y + self.height - self.BORDER_W - bead_w / 2 - j * bead_w / 2)
+                top_beads[j].pos = (bead_x, self.y + self.height - self.MIN_BORDER_W - bead_w / 2 - j * bead_w / 2)
                 top_beads[j].size = (bead_w, bead_w / 2)
 
             bottom_beads = self.bottom_beads[i]
 
             for j in range(self.n_bottom_beads):
-                bottom_beads[j].pos = (bead_x, self.y + self.BORDER_W + j * bead_w / 2)
+                bottom_beads[j].pos = (bead_x, self.y + self.MIN_BORDER_W + j * bead_w / 2)
                 bottom_beads[j].size = (bead_w, bead_w / 2)
 
 
