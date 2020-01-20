@@ -85,7 +85,7 @@ class Abacus(Widget):
         print(self.width, (800 - self.width) / 800)
 
         inner_w = self.width - 2 * w
-        bead_w = (self.height * self.DIVIDER_OFFSET - self.MIN_BORDER_W) / (self.n_bottom_beads + 1) * 2
+        bead_w = (self.height - 3 * w) / (self.n_top_beads + 1 + self.n_bottom_beads + 1) * 2
 
         offset_x = max(0, inner_w - (bead_w + self.MAX_BEAD_SPACING) * self.n_bars) / 2
         abacus_w = self.width - 2 * offset_x
@@ -109,10 +109,12 @@ class Abacus(Widget):
         self.border_highlight[1].pos = (self.x + offset_x + w, self.y + 4 * w / 5)
         self.border_highlight[1].size = (inner_w, w / 5)
 
-        self.divider.pos = (self.x + offset_x + w, self.y + self.height * self.DIVIDER_OFFSET)
+        div_y = (self.y + w + bead_w / 2 * self.n_bottom_beads + self.y + self.height - w - bead_w / 2 * self.n_top_beads) / 2 - w / 2
+
+        self.divider.pos = (self.x + offset_x + w, div_y)
         self.divider.size = (inner_w, w)
 
-        self.border_highlight[2].pos = (self.x + offset_x + w, self.y + 4 * w / 5 + self.height * self.DIVIDER_OFFSET)
+        self.border_highlight[2].pos = (self.x + offset_x + w, div_y + w - w / 5)
         self.border_highlight[2].size = (inner_w, w / 5)
 
         for i in range(self.n_bars):
@@ -122,10 +124,10 @@ class Abacus(Widget):
             x = self.x + offset_x + w + spacing / 2 + spacing * i - self.bar_w / 2
 
             bar[0].pos = (x, self.y + w - w / 10)
-            bar[0].size = (self.bar_w, self.height - w + w / 10 - self.height * (1 - self.DIVIDER_OFFSET))
+            bar[0].size = (self.bar_w, div_y - self.y - w + w / 10)
             
-            bar[1].pos = (x, self.y + self.height * self.DIVIDER_OFFSET + w - w / 10)
-            bar[1].size = (self.bar_w, self.height * (1 - self.DIVIDER_OFFSET) - 2 * w + w / 10)
+            bar[1].pos = (x, div_y + w - w / 10)
+            bar[1].size = (self.bar_w, self.y + self.height - w - (div_y + w - w / 10))
 
             bead_x = x + self.bar_w / 2 - bead_w / 2
 
