@@ -12,9 +12,6 @@ matplotlib = "*"
 
 [packages]
 kivy = "*"
-keras = "*"
-tensorflow = "*"
-matplotlib = "*"
 
 [requires]
 python_version = "3.7"
