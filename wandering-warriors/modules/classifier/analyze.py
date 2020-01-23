@@ -8,8 +8,9 @@ def clean(data_in) -> np.array:
     y = np.array(data_in[1::2])
 
     # Normalised [0,255] as integer
-    x = (255 * (x - np.min(x)) / np.ptp(x)).astype(int)
-    y = (255 * (y - np.min(y)) / np.ptp(y)).astype(int)
+    max_point = max(np.ptp(x), np.ptp(y))
+    x = (255 * (x - np.min(x)) / max_point).astype(int)
+    y = (255 * (y - np.min(y)) / max_point).astype(int)
 
     return x, y
 
