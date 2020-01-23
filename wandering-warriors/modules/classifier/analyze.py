@@ -3,20 +3,32 @@ from matplotlib import pyplot as plt
 from matplotlib import cm
 
 
-def plot(raw_data: list):
-    x = np.array(raw_data[0::2])
-    y = np.array(raw_data[1::2])
+def clean(data_in) -> np.array:
+    x = np.array(data_in[0::2])
+    y = np.array(data_in[1::2])
 
-    x = x - x.min()
-    y = y - y.min()
+    # Normalised [0,255] as integer
+    x = (255 * (x - np.min(x)) / np.ptp(x)).astype(int)
+    y = (255 * (y - np.min(y)) / np.ptp(y)).astype(int)
 
-    c = cm.rainbow(np.linspace(0, 1, len(y)))
+    return x, y
 
-    plt.scatter(x, y, color=c)
+    # data_out = np.dstack((data_in[0::2], data_in[1::2]))[0]
+    # print(data_out.shape)
+    # print(data_out)
+    #
+    # return data_out
+
+
+def plot(x, y):
+    c = cm.rainbow(np.linspace(0, 1, len(x)))
+
+    plt.scatter(x=x, y=y, color=c)
 
     plt.axis('equal')
     plt.show()
 
 
 def analyze(raw_data):
-    plot(raw_data)
+    x, y = clean(raw_data)
+    plot(x, y)
