@@ -2,6 +2,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Point, GraphicException
 from math import sqrt
 
+from . import classifier
+
 
 def calculate_points(x1, y1, x2, y2, steps=1):
     dx = x2 - x1
@@ -65,4 +67,6 @@ class DrawPad(FloatLayout):
         ud = touch.ud
         if self.in_pad:
             self.in_pad = False
-            return (self.canvas.get_group(ud['group'])[1].points)
+            points = self.canvas.get_group(ud['group'])[1].points
+            classifier.analyze(points)
+            return points
