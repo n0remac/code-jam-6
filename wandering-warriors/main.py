@@ -5,6 +5,10 @@ from kivy.uix.widget import Widget
 from modules import Abacus as AbacusBase
 from modules import DrawPad, LedgerLayout
 
+# imports for demo
+from kivy.core.window import Window
+from random import randint
+
 
 class Calculator(Screen):
     pass
@@ -23,7 +27,21 @@ class Abacus(AbacusBase):
 
 
 class Ledger(LedgerLayout):
-    pass
+    # https://stackoverflow.com/a/17296090
+    def __init__(self, **kwargs):
+        super(Ledger, self).__init__(**kwargs)
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, _keyboard, keycode, _text, _modifiers):
+        if keycode[1] == 'down':
+            self.add_cuneiform_from_b10(randint(0, 10**6))
+
+        return True
 
 
 class OperationsBar(Widget):

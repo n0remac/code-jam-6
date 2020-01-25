@@ -4,7 +4,9 @@ Please use this README to document your team's project. Make sure to include a g
 
 ## Installation
 
-We use `pipenv` as a virtual environment wrapper, so to install kivy, just run `pipenv install`.
+We use `pipenv` as a virtual environment wrapper, so to install `kivy` and `pillow`, just run `pipenv install`.
+
+You also need to generate images used with `pipenv run generate`.
 
 ## Development Installation
 
