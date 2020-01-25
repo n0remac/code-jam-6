@@ -43,15 +43,17 @@ def plot(x, y):
     plt.show()
 
 
-def analyze(raw_data):
+def analyze(raw_data, training: bool = False):
     # don't attempt to classify tiny shapes
     if len(raw_data) < 20:
         return None
 
     clean_data = clean(raw_data)
-    print(clean_data.shape)
-    training_data = TrainingData('./modules/classifier/cuneiform.npz')
-    training_data.append(clean_data, 10)
+
+    if training:
+        print(clean_data.shape)
+        training_data = TrainingData('./modules/classifier/cuneiform.npz')
+        training_data.append(clean_data, 1)
 
     # model = load_model("model.h5")
     # prediction = model.predict(clean_data)
