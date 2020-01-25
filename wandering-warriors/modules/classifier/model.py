@@ -1,11 +1,15 @@
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D
+from PIL import Image
 
 from train import TrainingData
 
 # Import training data
 training_data = TrainingData("cuneiform.npz")
 (x_all, y_all) = training_data.load()
+
+image = Image.fromarray(x_all[0])
+print(image)
 
 # Separate into test and training sets
 test_size = 40

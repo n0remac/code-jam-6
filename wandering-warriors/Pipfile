@@ -9,6 +9,7 @@ pre-commit = "*"
 tensorflow = "*"
 keras = "*"
 matplotlib = "*"
+pillow = "*"
 
 [packages]
 kivy = "*"
