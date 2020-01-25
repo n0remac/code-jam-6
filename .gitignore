@@ -1,4 +1,4 @@
-k# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -109,3 +109,6 @@ venv.bak/
 # JetBrains IDE
 .idea/
 *.db
+
+# Mac
+.DS_Store
