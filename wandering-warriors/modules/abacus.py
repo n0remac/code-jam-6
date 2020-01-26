@@ -181,6 +181,7 @@ class Abacus(FloatLayout):
 
         self.bind(pos=self.update, size=self.update)
         self.update()
+        self.add(0,0)
 
     def update(self, *args):
         border_w = max(self.height / 20, self.MIN_BORDER_W)
@@ -424,7 +425,6 @@ class Abacus(FloatLayout):
                 return False
         self.enqueue_anim(lambda: self.build_anim(anim))
 
-
     def simple_addition(self, i, x, y):
         print(f'simple_addition {x} {y}  {i}')
         anim = AbacusAnim()
@@ -442,7 +442,24 @@ class Abacus(FloatLayout):
         anim.add_shift_down(self.bottom_beads[i], self.TOP_V - y)
         self.enqueue_anim(lambda: self.build_anim(anim))
 
+    def to_ten(self, i, x, y):
+        print(f'{x} + {y}')
+        anim = AbacusAnim()
+        top_x = x // self.TOP_V
+        bottom_x = x % self.TOP_V
+        compliment = self.PLACE - y
+        if top_x == 0:
+            print('test1')
+            print(f'The compliment of y = {y} in relation to 10 is {compliment}')
+            anim.add_shift_down(self.bottom_beads[i], compliment)
+        elif y == self.TOP_V:
+            print('test2')
+            print(f'comp {compliment} bot -botx {self.N_BOTTOM_BEADS - bottom_x}')
+            anim.add_shift_down(self.top_beads[i], 1) 
+
     def add(self, x, y):
+        x = 9
+        y = 1
         self.set_number(x)
         num_one = []
         num_two = []
@@ -465,3 +482,38 @@ class Abacus(FloatLayout):
                 self.to_five(i-l-1, x, y)
 
         self.play_anims_from_queue()
+
+    def subtract(self, y):
+        x = 1
+        y = 1
+        self.set_number(x)
+        num_one = []
+        num_two = []
+        for n in str(x):
+            num_one.append(int(n))
+        for n in str(y):
+            num_two.append(int(n))
+        while len(num_one) != len(num_two):
+            if len(num_one) > len(num_two):
+                num_two.insert(0, 0)
+            if len(num_one) < len(num_two):
+                num_one.insert(0, 0)
+
+        i = len(num_one)
+        for l in range(i):
+            x, y = (num_one[l], num_two[l])
+            if (x % self.TOP_V > self.N_BOTTOM_BEADS and y < self.N_BOTTOM_BEADS - x % self.TOP_V):
+                self.simple_subtraction(i-l-1, x, y)
+            elif not (x + y >= self.PLACE):
+                self.to_five(i-l-1, x, y)
+
+
+
+    def simple_subtraction(self, i, x, y):
+        print(f'simple_subtraction {x} {y}  {i}')
+        anim = AbacusAnim()
+        top = y // self.TOP_V
+        bottom = y % self.TOP_V
+        anim.add_shift_up(self.top_beads[i], top)
+        anim.add_shift_up(self.bottom_beads[i], bottom)
+        self.enqueue_anim(lambda: self.build_anim(anim))
