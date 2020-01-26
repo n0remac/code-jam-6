@@ -15,6 +15,8 @@ class LedgerLayout(FloatLayout):
         self.l_pos = ''
         self.m_pos = ''
         self.r_pos = ''
+        self.n1 = 0
+        self.n2 = 0
 
         self.clear_button_src = 'assets/graphics/clear.png'
 
