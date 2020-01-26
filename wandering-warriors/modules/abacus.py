@@ -2,6 +2,7 @@ from collections import deque
 
 from kivy.graphics import Color, Rectangle
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
 
 from math import floor
 
@@ -408,3 +409,20 @@ class Abacus(FloatLayout):
                 anim.add_shift_down(self.bottom_beads[i], -1)
 
         return self.build_anim(anim)
+
+    def close_help(self):
+        self.remove_widget(self.help_label)
+
+    def open_help(self):
+        self.help_label = FloatLayout()
+        label = Label(
+            text='Tap the beads to make them move or send numbers from the ledger below.',
+            pos=(0, 0),
+            size=(180, 100),
+            size_hint=(None, None))
+        with label.canvas:
+            Color(0, 1, 0, 0.25)
+
+        self.help_label.add_widget(label)
+
+        self.add_widget(self.help_label)

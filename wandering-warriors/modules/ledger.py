@@ -1,5 +1,6 @@
 from kivy.uix.boxlayout import BoxLayout
 import pandas as pd
+from kivy.uix.label import Label
 
 
 class Ledger(BoxLayout):
@@ -28,6 +29,8 @@ class Ledger(BoxLayout):
             self.col = col
 
     def update(self, n: int, op: str = '='):
+        base_sixty_digits = self.num_to_cuneiform(n)
+
         """update active cell"""
         if op == '+':
             self.df.at[self.row, self.col] += n
@@ -83,72 +86,31 @@ class Ledger(BoxLayout):
         self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
         self.new_row()
 
-    # def add_cuneiform(self, b10_number: int):
-    #     # turn into an [b10, b10, b10], each at max 60
-    #     if b10_number == 0:
-    #         if self.side == 'left':
-    #             self.left_digit = False
-    #         else:
-    #             self.right_digit = False
-    #
-    #         self.add_next_digit(BoxLayout())
-    #         return
-    #
-    #     upper_limit = int(math.log(b10_number, 60)) + 1
-    #     b60_number = []
-    #
-    #     for i in range(upper_limit - 1, -1, -1):
-    #         b60_number.append(b10_number // 60 ** i)
-    #         b10_number %= 60 ** i
-    #
-    #     layout = BoxLayout()
-    #
-    #     for i in b60_number:
-    #         ones = i % 10
-    #         tens = (i // 10) * 10
-    #         layout.add_widget(
-    #             Image(source=f'assets/graphics/cuneiform/c{tens}.png')
-    #         )
-    #
-    #         layout.add_widget(
-    #             Image(source=f'assets/graphics/cuneiform/c{ones}.png')
-    #         )
-    #
-    #     if self.side == 'left':
-    #         self.left_digit = False
-    #         if self.stored_left_digit:
-    #             self.stored_left_digit.clear_widgets()
-    #         self.stored_left_digit = layout
-    #     else:
-    #         self.right_digit = False
-    #         if self.stored_right_digit:
-    #             self.stored_right_digit.clear_widgets()
-    #         self.stored_right_digit = layout
-    #
-    #     self.add_next_digit(layout)
-    #
-    # def _keydown(self, *args):
-    #     if(args[1] >= 257 and args[1] <= 265):
-    #         if not self.add_left_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png')):
-    #             self.add_right_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png'))
-    #     if(args[1] == 267):
-    #         l = Label(text="[color=000000]/[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 268):
-    #         l = Label(text="[color=000000]*[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 269):
-    #         l = Label(text="[color=000000]-[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 270):
-    #         l = Label(text="[color=000000]+[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 271):
-    #         self.l_pos = ''
-    #         self.m_pos = ''
-    #         self.r_pos = ''
-    #         self.next_line()
+    def num_to_cuneiform(self, x):
+        base_sixty_digits = []
+        while x > 0:
+            n = x % 60
+            base_sixty_digits.insert(0, n % 60)
+            x //= 60
+        imgs = []
+        for n in base_sixty_digits:
+            img = Image(source = f'assets/graphics/{n}.svg')
+            imgs.append(img)
+        return imgs
+
+    def close_help(self):
+        self.remove_widget(self.help_label)
+
+    def open_help(self):
+        self.help_label = FloatLayout()
+        label = Label(
+            text='Make tally marks on the sand to record a number.',
+            pos=(20, 20),
+            size=(180, 100),
+            size_hint=(None, None))
+        with label.canvas:
+            Color(0, 1, 0, 0.25)
+
+        self.help_label.add_widget(label)
+
+        self.add_widget(self.help_label)

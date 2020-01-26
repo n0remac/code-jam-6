@@ -1,6 +1,7 @@
 from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Point, GraphicException, Rectangle
 from math import sqrt
+from kivy.uix.label import Label
 
 from .gesture import check_gesture
 from .gesture_db import load_gestures
@@ -28,6 +29,7 @@ class DrawPad(FloatLayout):
         self.in_pad = False
         self.lines = []
         self.gdb = load_gestures()
+        self.help_label = Label()
 
         with self.canvas:
             self.border = []
@@ -114,3 +116,20 @@ class DrawPad(FloatLayout):
     def clear(self):
         for l in self.lines:
             l[0].points = []
+
+    def close_help(self):
+        self.remove_widget(self.help_label)
+
+    def open_help(self):
+        self.help_label = FloatLayout()
+        label = Label(
+            text='Make tally marks on the sand to record a number.',
+            pos=self.pos,
+            size=(180, 100),
+            size_hint=(None, None))
+        with label.canvas:
+            Color(0, 1, 0, 0.25)
+
+        self.help_label.add_widget(label)
+
+        self.add_widget(self.help_label)

@@ -209,12 +209,15 @@
             self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width - 3
             self.y = self.parent.parent.y + self.parent.parent.height - self.height - 1
 
+            self.parent.parent.open_help()
+
         on_release:
             self.size = [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
             self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width
             self.y = self.parent.parent.y + self.parent.parent.height - self.height
 
-            #self.parent.open_help()
+            self.parent.parent.close_help()
+            
 
         Image:
             pos: self.parent.pos
