@@ -4,13 +4,14 @@
         TopMenu:
             SettingsButton:
         Abacus:
-            HelpButton:
+            #HelpButton:
             ClearButton:
         BoxLayout:
             orientation: 'horizontal'
             Ledger:
-                HelpButton:
-                ClearButton:
+                #HelpButton:
+                #ClearButton:
+                NumberButton:
             OperationsBar:
             CuneiformDrawingInput:
                 HelpButton:
@@ -198,7 +199,31 @@
             self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width
             self.y = self.parent.parent.y + self.parent.parent.height - self.height
 
-            #self.parent.open_help()
+            self.parent.parent.open_help()
+
+        Image:
+            pos: self.parent.pos
+            size: self.parent.size
+            source: 'assets/graphics/help.png'
+
+<NumberButton>:
+    Button:
+        size: [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+        x: self.parent.parent.x + self.parent.parent.width - 2 * self.width
+        y: self.parent.parent.y + self.parent.parent.height - self.height
+        background_color: 1, 1, 1, 0
+
+        on_press:
+            self.size = [max(min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96) - 2, 1)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width - 3
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height - 1
+
+        on_release:
+            self.size = [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height
+
+            self.parent.parent.send_number()
 
         Image:
             pos: self.parent.pos

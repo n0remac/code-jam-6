@@ -113,3 +113,6 @@ class DrawPad(FloatLayout):
     def clear(self):
         for l in self.lines:
             l[0].points = []
+
+    def open_help(self):
+        print('test')

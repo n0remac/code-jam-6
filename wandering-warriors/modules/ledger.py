@@ -9,34 +9,47 @@ class LedgerLayout(FloatLayout):
     child_widgets: list
 
     def __init__(self, *args, **kwargs):
-        super(LedgerLayout, self).__init__()
+        super(LedgerLayout, self).__init__(**kwargs)
         Window.bind(on_key_down=self._keydown)
         self.l_pos = ''
         self.m_pos = ''
         self.r_pos = ''
-
         self.clear_button_src = 'assets/graphics/clear.png'
+        
+
+        #self.bind(pos=self.update, size=self.update)
+        #self.update()
+
+    def update(self, *args):
+        i = 2
+        for child in super(LedgerLayout, self).children:
+            child.size = [min(min(self.width, self.height) / 8, 96)] * 2
+            child.x = self.x + child.x
+            child.y = self.y + child.y
+            i += 1
 
     def left(self, widget):
-        widget.x = super().x
+        widget.x = self.x
 
     def right(self, widget):
-        widget.x = super().x + super().size[0] - 1.5 * widget.size[0]
+        widget.center_x = self.x + self.size[0] - 1.5 * widget.size[0]
 
     def mid(self, widget):
-        widget.x = super().x + super().size[0] / 2 - .6 * widget.size[0]
+        widget.x = self.x + self.size[0] / 2 - .6 * widget.size[0]
 
     def top(self, widget):
-        widget.y = super().y + super().size[1]-widget.size[1]
+        widget.y = self.y + self.size[1]-widget.size[1]
 
     def add_operator(self, widget):
+
         self.left(widget)
         self.top(widget)
         super().add_widget(widget)
 
     def add_middle(self, w):
         if self.m_pos == '':
-            w.size_hint = (.3, .3)
+            w.size_hint[0] = self.size_hint[0] / 5
+            w.size_hint[1] = self.size_hint[1] / 5
             self.mid(w)
             self.top(w)
             self.m_pos = w
@@ -96,3 +109,6 @@ class LedgerLayout(FloatLayout):
 
     def clear(self):
         pass
+
+    def send_number(self):
+        print (self.parent.parent.children[1].set_value(42))

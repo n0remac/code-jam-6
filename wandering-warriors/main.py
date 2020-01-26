@@ -50,6 +50,9 @@ class HelpButton(Widget):
 class SettingsButton(Widget):
     pass
 
+class NumberButton(Widget):
+    pass
+
 
 class Screen:
     def __init__(self):
