@@ -5,15 +5,18 @@
             SettingsButton:
         Abacus:
             HelpButton:
+                text: 'abacus help'# TODO: fill out dialogue
             ClearButton:
         BoxLayout:
             orientation: 'horizontal'
             Ledger:
                 HelpButton:
+                    text: 'ledger help' # TODO: fill out dialogue
                 ClearButton:
             OperationsBar:
             CuneiformDrawingInput:
                 HelpButton:
+                    text: 'drawing input help' # TODO: fill out dialogue
                 ClearButton:
 
 <TopMenu>:
@@ -198,7 +201,7 @@
             self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width
             self.y = self.parent.parent.y + self.parent.parent.height - self.height
 
-            #self.parent.open_help()
+            self.parent.open_help()
 
         Image:
             pos: self.parent.pos

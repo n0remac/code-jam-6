@@ -1,4 +1,5 @@
 from kivy.app import App
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
@@ -44,7 +45,14 @@ class ClearButton(Widget):
 
 
 class HelpButton(Widget):
-    pass
+    text = 'test'
+
+    def open_help(self):
+        popup_window = Popup(title="Help Window", content=self.text,
+                             size_hint=(None, None), size=(400, 400))
+
+        popup_window.open()  # show the popup
+        print(self.text)
 
 
 class SettingsButton(Widget):
