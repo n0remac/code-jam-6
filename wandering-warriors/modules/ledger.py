@@ -104,7 +104,7 @@ class Ledger(BoxLayout):
     def open_help(self):
         self.help_label = FloatLayout()
         label = Label(
-            text='Make tally marks on the sand to record a number.',
+            text='Record expressions here to be computed on the abacus.',
             pos=(20, 20),
             size=(180, 100),
             size_hint=(None, None))
