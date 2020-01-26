@@ -1,4 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.image import Image
 import pandas as pd
 
 
@@ -10,7 +11,7 @@ class Ledger(BoxLayout):
         self.col = 'x'
         self.row = 1
         self.new_row()
-
+        self.num_to_cuneiform(59)
         self.clear_button_src = 'assets/graphics/clear.png'
 
     def select(self, col: str):
@@ -56,72 +57,15 @@ class Ledger(BoxLayout):
     def clear(self):
         self.rv.data = []
 
-    # def add_cuneiform(self, b10_number: int):
-    #     # turn into an [b10, b10, b10], each at max 60
-    #     if b10_number == 0:
-    #         if self.side == 'left':
-    #             self.left_digit = False
-    #         else:
-    #             self.right_digit = False
-    #
-    #         self.add_next_digit(BoxLayout())
-    #         return
-    #
-    #     upper_limit = int(math.log(b10_number, 60)) + 1
-    #     b60_number = []
-    #
-    #     for i in range(upper_limit - 1, -1, -1):
-    #         b60_number.append(b10_number // 60 ** i)
-    #         b10_number %= 60 ** i
-    #
-    #     layout = BoxLayout()
-    #
-    #     for i in b60_number:
-    #         ones = i % 10
-    #         tens = (i // 10) * 10
-    #         layout.add_widget(
-    #             Image(source=f'assets/graphics/cuneiform/c{tens}.png')
-    #         )
-    #
-    #         layout.add_widget(
-    #             Image(source=f'assets/graphics/cuneiform/c{ones}.png')
-    #         )
-    #
-    #     if self.side == 'left':
-    #         self.left_digit = False
-    #         if self.stored_left_digit:
-    #             self.stored_left_digit.clear_widgets()
-    #         self.stored_left_digit = layout
-    #     else:
-    #         self.right_digit = False
-    #         if self.stored_right_digit:
-    #             self.stored_right_digit.clear_widgets()
-    #         self.stored_right_digit = layout
-    #
-    #     self.add_next_digit(layout)
-    #
-    # def _keydown(self, *args):
-    #     if(args[1] >= 257 and args[1] <= 265):
-    #         if not self.add_left_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png')):
-    #             self.add_right_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png'))
-    #     if(args[1] == 267):
-    #         l = Label(text="[color=000000]/[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 268):
-    #         l = Label(text="[color=000000]*[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 269):
-    #         l = Label(text="[color=000000]-[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 270):
-    #         l = Label(text="[color=000000]+[/color]", markup=True)
-    #         l.font_size = '58dp'
-    #         self.add_middle(l)
-    #     if(args[1] == 271):
-    #         self.l_pos = ''
-    #         self.m_pos = ''
-    #         self.r_pos = ''
-    #         self.next_line()
+    def num_to_cuneiform(self, x):
+        x = 74
+        base_sixty_digits = []
+        while x > 0:
+            n = x % 60
+            base_sixty_digits.insert(0, n % 60)
+            x //= 60
+        imgs = []
+        for n in base_sixty_digits:
+            img = Image(source = f'assets/graphics/{n}.svg')
+            imgs.append(img)
+        return imgs

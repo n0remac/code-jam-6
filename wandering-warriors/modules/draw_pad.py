@@ -56,6 +56,8 @@ class DrawPad(FloatLayout):
         self.border[3].pos = (self.x + self.width - 16, self.y)
         self.border[3].size = (16, self.height)
 
+        self.clear()
+
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
         self.ud = touch.ud
