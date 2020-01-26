@@ -408,3 +408,60 @@ class Abacus(FloatLayout):
                 anim.add_shift_down(self.bottom_beads[i], -1)
 
         return self.build_anim(anim)
+
+    def set_number(self, x, i=0):
+        print(f"set_number {x}  {i}")
+        anim = AbacusAnim()
+        while x > 0:
+            n = x % self.PLACE
+            top = n // self.TOP_V
+            bottom = n % self.TOP_V
+            anim.add_shift_up(self.top_beads[i], top)
+            anim.add_shift_up(self.bottom_beads[i], bottom)
+            x //= self.PLACE
+            i += 1
+            if i > self.N_BARS:
+                return False
+        self.enqueue_anim(lambda: self.build_anim(anim))
+
+
+    def simple_addition(self, i, x, y):
+        print(f'simple_addition {x} {y}  {i}')
+        anim = AbacusAnim()
+        top = y // self.TOP_V
+        bottom = y % self.TOP_V
+        anim.add_shift_up(self.top_beads[i], top)
+        anim.add_shift_up(self.bottom_beads[i], bottom)
+        self.enqueue_anim(lambda: self.build_anim(anim))
+               
+    def to_five(self, i, x, y):
+        print(f'to_five {x} {y}  {i}')
+        anim = AbacusAnim()
+        bottomY = y % self.TOP_V
+        anim.add_shift_up(self.top_beads[i], 1)
+        anim.add_shift_down(self.bottom_beads[i], self.TOP_V - y)
+        self.enqueue_anim(lambda: self.build_anim(anim))
+
+    def add(self, x, y):
+        self.set_number(x)
+        num_one = []
+        num_two = []
+        for n in str(x):
+            num_one.append(int(n))
+        for n in str(y):
+            num_two.append(int(n))
+        while len(num_one) != len(num_two):
+            if len(num_one) > len(num_two):
+                num_two.insert(0, 0)
+            if len(num_one) < len(num_two):
+                num_one.insert(0, 0)
+
+        i = len(num_one)
+        for l in range(i):
+            x, y = (num_one[l], num_two[l])
+            if not (x % self.TOP_V + y % self.TOP_V > self.N_BOTTOM_BEADS or x + y >= self.PLACE):
+                self.simple_addition(i-l-1, x, y)
+            elif not (x + y >= self.PLACE):
+                self.to_five(i-l-1, x, y)
+
+        self.play_anims_from_queue()

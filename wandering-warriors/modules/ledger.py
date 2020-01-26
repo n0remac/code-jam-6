@@ -5,6 +5,7 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 
 
+
 class LedgerLayout(FloatLayout):
     child_widgets: list
 
@@ -65,6 +66,7 @@ class LedgerLayout(FloatLayout):
         return False
 
     def next_line(self):
+        self.parent.parent.children[1].add(1,2)
         for child in super(LedgerLayout, self).children:
             child.y -= child.size[1] - .2 * child.size[1]
 
@@ -96,3 +98,5 @@ class LedgerLayout(FloatLayout):
 
     def clear(self):
         pass
+
+
